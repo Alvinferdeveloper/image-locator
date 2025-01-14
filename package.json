@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "exif-js": "^2.3.0",
+    "exifreader": "^4.26.0",
     "framer-motion": "^11.17.0",
     "lucide-react": "^0.471.1",
     "next": "15.1.4",

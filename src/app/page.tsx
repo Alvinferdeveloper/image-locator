@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 import { Upload, CheckCircle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -8,19 +8,36 @@ import { motion, AnimatePresence } from 'framer-motion'
 export default function SplitScreenImageUpload() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [isUploaded, setIsUploaded] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        setSelectedImage(e.target?.result as string)
-        setIsUploaded(true)
-        setTimeout(() => setIsUploaded(false), 2000)
-      }
-      reader.readAsDataURL(file)
+  const handleImageUpload = useCallback((file: File) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      setSelectedImage(e.target?.result as string)
+      setIsUploaded(true)
+      setTimeout(() => setIsUploaded(false), 2000)
     }
-  }
+    reader.readAsDataURL(file)
+  }, [])
+
+  const onDragOver = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }, [])
+
+  const onDragLeave = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault()
+    setIsDragging(false)
+  }, [])
+
+  const onDrop = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault()
+    setIsDragging(false)
+    const file = e.dataTransfer.files[0]
+    if (file && file.type.startsWith('image/')) {
+      handleImageUpload(file)
+    }
+  }, [handleImageUpload])
 
   return (
     <div className="h-screen w-full bg-black text-white">
@@ -49,13 +66,18 @@ export default function SplitScreenImageUpload() {
                 <label
                   htmlFor="image-upload"
                   className="w-64 h-64 border-2 border-dashed border-gray-700 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-gray-500 transition-all duration-300"
+                  onDragOver={onDragOver}
+                  onDragLeave={onDragLeave}
+                  onDrop={onDrop}
                 >
                   {selectedImage ? (
                     <img src={selectedImage} alt="Uploaded" className="w-full h-full object-cover rounded-lg" />
                   ) : (
                     <>
                       <Upload className="w-12 h-12 text-gray-400" />
-                      <span className="mt-2 text-sm text-gray-400">Click or drag image here</span>
+                      <span className="mt-2 text-sm text-gray-400">
+                        {isDragging ? 'Drop image here' : 'Click or drag image here'}
+                      </span>
                     </>
                   )}
                   <input
@@ -63,7 +85,10 @@ export default function SplitScreenImageUpload() {
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    onChange={handleImageUpload}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0]
+                      if (file) handleImageUpload(file)
+                    }}
                   />
                 </label>
               </div>

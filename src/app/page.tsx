@@ -10,7 +10,14 @@ export default function SplitScreenImageUpload() {
   const [isUploaded, setIsUploaded] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
 
+  const isImageFile = (file: File) => {
+    return file.type.startsWith('image/');
+  };
+
   const handleImageUpload = useCallback((file: File) => {
+    if (!isImageFile(file)) {
+      return;
+    }
     const reader = new FileReader()
     reader.onload = (e) => {
       setSelectedImage(e.target?.result as string)

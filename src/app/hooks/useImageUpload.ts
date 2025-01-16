@@ -3,6 +3,7 @@ export default function useImageUpload (){
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [isUploaded, setIsUploaded] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
+    const [arrayBuffer, setArrayBuffer] = useState<ArrayBuffer>()
   
     const isImageFile = (file: File) => file.type.startsWith("image/");
   
@@ -10,11 +11,16 @@ export default function useImageUpload (){
       if (!isImageFile(file)) return;
       const reader = new FileReader();
       reader.onload = (e) => {
-        setSelectedImage(e.target?.result as string);
+        const arrayBuffer = reader.result as ArrayBuffer;
+        const blob = new Blob([arrayBuffer], { type: file.type });
+        const url = URL.createObjectURL(blob);
+
+        setSelectedImage(url);
+        setArrayBuffer(arrayBuffer);
         setIsUploaded(true);
         setTimeout(() => setIsUploaded(false), 2000);
       };
-      reader.readAsDataURL(file);
+      reader.readAsArrayBuffer(file);
     }, []);
   
     const handleDragEvents = useCallback(
@@ -31,5 +37,6 @@ export default function useImageUpload (){
       isDragging,
       handleImageUpload,
       handleDragEvents,
+      arrayBuffer
     };
   };

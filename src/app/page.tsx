@@ -4,6 +4,8 @@ import React from 'react'
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 import useImageUpload from '@/app//hooks/useImageUpload';
 import ImageUpload from '@/app/components/imageUpload';
+import ExifReader from 'exifreader';
+import useExtractExifData from '@/app/hooks/useExtractExifData';
 
 export default function SplitScreenImageUpload() {
   const {
@@ -12,14 +14,21 @@ export default function SplitScreenImageUpload() {
     isDragging,
     handleImageUpload,
     handleDragEvents,
+    arrayBuffer
   } = useImageUpload();
-
+  const { extractExifData, exifData } = useExtractExifData();
+  
+  const handleExtractExifData = ()=> {
+    extractExifData(arrayBuffer)
+  }
+  
   return (
     <div className="h-screen w-full bg-black text-white">
       <PanelGroup direction="horizontal" className="h-full">
         <Panel defaultSize={50} minSize={30}>
           <div className="h-full p-8 flex flex-col">
             <h1 className="text-4xl font-bold mb-4">ImageSplit</h1>
+            <button onClick={handleExtractExifData}>Enviar</button>
             <p className="text-lg text-gray-400 mb-8">
               Transform your images instantly with our split-view editor
             </p>

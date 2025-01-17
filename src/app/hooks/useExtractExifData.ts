@@ -2,7 +2,7 @@ import ExifReader from 'exifreader';
 import { useState } from 'react';
 
 type ExifData = {
-  coordinates: {
+  coordinates?: {
     latitude: number,
     longitude: number
   }

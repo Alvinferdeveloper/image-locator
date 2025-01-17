@@ -16,13 +16,13 @@ export default function ImageUpload ({
     handleDragEvents,
   }: Props) {
     return (
-      <div className="relative z-10 bg-black/40 p-8 rounded-2xl backdrop-blur-xl border border-white/10">
+      <div className="relative z-10 bg-gray-800/80 p-8 rounded-2xl backdrop-blur-xl border border-gray-700 w-full max-w-md shadow-lg">
         <UploadOverlay isUploaded={isUploaded} />
         <label
-          htmlFor="image-upload"
-          className={`w-64 h-64 border-2 border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all duration-300 ${
-            isDragging ? "border-gray-500" : "border-gray-700"
-          }`}
+         htmlFor="image-upload"
+         className={`w-full h-64 border-2 border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all duration-300 ${
+           isDragging ? 'border-purple-400 bg-purple-800/20' : 'border-gray-600 hover:border-purple-500'
+         }`}
           onDragOver={(e) => handleDragEvents(e, true)}
           onDragLeave={(e) => handleDragEvents(e, false)}
           onDrop={(e) => {

@@ -4,6 +4,7 @@ import { ExifData } from '@/app/types/exif';
 
   export default function useExtractExifData(){
     const [ exifData, setExifData ] = useState<ExifData>();
+    const [ noCoordinates, setNoCoordinates ] = useState<boolean>()
     const extractExifData = (arrayBuffer?:ArrayBuffer)=> {
       if(arrayBuffer){
         const tags = ExifReader.load(arrayBuffer, { expanded: true });
@@ -19,6 +20,12 @@ import { ExifData } from '@/app/types/exif';
             latitude: Latitude,
             longitude: Longitude
           }
+          setNoCoordinates(false)
+        }else {
+          setNoCoordinates(true);
+          setTimeout(() => {
+            setNoCoordinates(false)
+          }, 2000)
         }
         setExifData({ coordinates, imageInfo })
       }
@@ -26,6 +33,7 @@ import { ExifData } from '@/app/types/exif';
 
     return { 
       extractExifData,
-      exifData
+      exifData,
+      noCoordinates
     }
   }

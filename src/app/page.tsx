@@ -6,7 +6,8 @@ import useImageUpload from '@/app//hooks/useImageUpload';
 import ImageUpload from '@/app/components/imageUpload';
 import useExtractExifData from '@/app/hooks/useExtractExifData';
 import Map from '@/app/components/map';
-
+import { AnimatePresence, motion } from 'framer-motion'
+import { MapPinOffIcon as MapOff } from 'lucide-react';
 
 export default function SplitScreenImageUpload() {
   const {
@@ -17,7 +18,7 @@ export default function SplitScreenImageUpload() {
     handleDragEvents,
     arrayBuffer
   } = useImageUpload();
-  const { extractExifData, exifData } = useExtractExifData();
+  const { extractExifData, exifData, noCoordinates } = useExtractExifData();
 
   const handleExtractExifData = () => {
     extractExifData(arrayBuffer)
@@ -56,9 +57,31 @@ export default function SplitScreenImageUpload() {
         </Panel>
         <PanelResizeHandle className="w-px bg-gray-800 hover:bg-gray-700 transition-colors" />
         <Panel minSize={30}>
-          <div className="h-full w-full flex items-center justify-center">
+          <div className="relative h-full w-full flex items-center justify-center">
             {
-              exifData?.coordinates ? <Map coordinates={exifData.coordinates}/> : <span className="text-lg text-gray-400">Image Location</span>
+              exifData?.coordinates ? <Map coordinates={exifData.coordinates} /> : <span className="text-lg text-gray-400">Image Location</span>
+            }
+            {
+
+              <AnimatePresence>
+                {
+                  noCoordinates === true && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.3 }}
+                      className="absolute z-20 flex flex-col w-full h-full items-center justify-center bg-black/70 rounded-2xl"
+                    >
+                      <MapOff className="w-20 h-20 text-yellow-400 mb-4" />
+                      <p className="text-white text-lg font-semibold text-center">
+                        Esta imagen no posee datos de ubicación
+                      </p>
+                    </motion.div>
+                  )
+                }
+              </AnimatePresence>
+
             }
           </div>
         </Panel>

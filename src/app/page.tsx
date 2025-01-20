@@ -5,6 +5,7 @@ import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 import useImageUpload from '@/app//hooks/useImageUpload';
 import ImageUpload from '@/app/components/imageUpload';
 import useExtractExifData from '@/app/hooks/useExtractExifData';
+import Map from '@/app/components/map';
 
 
 export default function SplitScreenImageUpload() {
@@ -26,7 +27,7 @@ export default function SplitScreenImageUpload() {
     <div className="h-screen w-full bg-gray-900 text-white flex flex-col">
       <PanelGroup direction="horizontal" className="h-full">
         <Panel defaultSize={50} minSize={30}>
-          <div className="h-full p-8 flex flex-col">
+          <div className="h-full p-8 pb-2 flex flex-col overflow-y-auto">
             <h1 className="text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
               Descubre el Origen de tus Fotos
             </h1>
@@ -55,8 +56,10 @@ export default function SplitScreenImageUpload() {
         </Panel>
         <PanelResizeHandle className="w-px bg-gray-800 hover:bg-gray-700 transition-colors" />
         <Panel minSize={30}>
-          <div className="h-full p-8 flex items-center justify-center">
-            <span className="text-lg text-gray-400">Preview Area</span>
+          <div className="h-full w-full flex items-center justify-center">
+            {
+              exifData?.coordinates ? <Map coordinates={exifData.coordinates}/> : <span className="text-lg text-gray-400">Image Location</span>
+            }
           </div>
         </Panel>
       </PanelGroup>

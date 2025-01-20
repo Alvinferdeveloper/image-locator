@@ -11,13 +11,16 @@
   "dependencies": {
     "exifreader": "^4.26.0",
     "framer-motion": "^11.17.0",
+    "leaflet": "^1.9.4",
     "lucide-react": "^0.471.1",
     "next": "15.1.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-leaflet": "^5.0.0",
     "react-resizable-panels": "^2.1.7"
   },
   "devDependencies": {
+    "@types/leaflet": "^1.9.16",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

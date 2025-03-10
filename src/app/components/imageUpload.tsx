@@ -20,16 +20,16 @@ export default function ImageUpload({
 
 }: Props) {
   return (
-    <div className="relative z-10 bg-gray-800/80 p-8 rounded-2xl backdrop-blur-xl border border-gray-700 w-full max-w-md shadow-lg">
+    <div className="relative z-10 bg-gray-800/80 p-8 rounded-2xl backdrop-blur-xl mb-3 border border-gray-700 w-full max-w-md shadow-lg">
       <DropImageBox
-      selectedImage={selectedImage}
-      isUploaded={isUploaded}
-      isDragging={isDragging}
-      handleDragEvents={handleDragEvents}
-      handleImageUpload={handleImageUpload} 
+        selectedImage={selectedImage}
+        isUploaded={isUploaded}
+        isDragging={isDragging}
+        handleDragEvents={handleDragEvents}
+        handleImageUpload={handleImageUpload}
       />
       {exifData?.imageInfo && (
-        <ImageInformation imageInfo={exifData.imageInfo}/>
+        <ImageInformation imageInfo={exifData.imageInfo} />
       )}
     </div>
   );
